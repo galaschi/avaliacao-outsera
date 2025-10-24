@@ -1,5 +1,7 @@
 # Projeto de Automação de Testes - Avaliação Outsera
 
+[![CI](https://github.com/galaschi/avaliacao-outsera/actions/workflows/ci.yml/badge.svg)](https://github.com/galaschi/avaliacao-outsera/actions/workflows/ci.yml)
+
 Projeto de automação de testes end-to-end (E2E) e testes de API utilizando **Playwright** e **Cucumber.js**, desenvolvido como parte de uma avaliação técnica.
 
 ## 📋 Descrição
@@ -15,6 +17,22 @@ Aplicações web testadas:
 - **Automation Practice** (http://www.automationpractice.pl) - Cenários de login e checkout
 
 ---
+
+## ⚙️ CI/CD (GitHub Actions)
+
+Este repositório possui um pipeline de CI configurado em `.github/workflows/ci.yml` que executa automaticamente após cada push e pull request na branch `main`:
+
+- Instala Node 18, dependências (npm ci) e navegadores do Playwright
+- Executa os testes de API com Playwright (`tests/api/`) usando os reporters `github` e `html`
+- Executa as features BDD do Cucumber (`features/*.feature`) com geração de JSON e um relatório HTML customizado
+- Publica os relatórios como artefatos do job
+
+Relatórios gerados no pipeline:
+- Playwright HTML: artifact `playwright-report` (abra `index.html`)
+- Cucumber HTML customizado: artifact `cucumber-html` (arquivo `test-results/cucumber-html-report.html`)
+- Cucumber JSON: artifact `cucumber-json` (arquivos `cucumber-report-*.json`)
+
+Você pode acessar as execuções e baixar os relatórios na aba Actions: https://github.com/galaschi/avaliacao-outsera/actions
 
 ## 🏗️ Arquitetura e Estrutura de Pastas
 
