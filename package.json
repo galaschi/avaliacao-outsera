@@ -1,0 +1,19 @@
+{
+  "name": "avaliacao",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test:playwright": "npx playwright test",
+    "test:cucumber": "node ./node_modules/@cucumber/cucumber/bin/cucumber-js --require-module @babel/register --require tests/steps/**/*.js features/**/*.feature"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+  "@playwright/test": "^1.56.1",
+  "@cucumber/cucumber": "^8.11.0",
+  "@babel/register": "^7.22.5",
+    "@types/node": "^24.8.1"
+  }
+}
