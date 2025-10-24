@@ -34,6 +34,11 @@ Relatórios gerados no pipeline:
 
 Você pode acessar as execuções e baixar os relatórios na aba Actions: https://github.com/galaschi/avaliacao-outsera/actions
 
+📄 **Documentação completa do pipeline**: [docs/CI-CD-PIPELINE.md](docs/CI-CD-PIPELINE.md)
+- Arquitetura e configuração detalhada
+- Como interpretar os relatórios
+- Troubleshooting e métricas
+
 ## 🏗️ Arquitetura e Estrutura de Pastas
 
 ```
