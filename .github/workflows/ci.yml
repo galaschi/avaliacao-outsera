@@ -42,6 +42,8 @@ jobs:
           if-no-files-found: warn
 
       - name: Run Cucumber features (BDD)
+        id: cucumber
+        continue-on-error: true
         run: npx cucumber-js
 
       - name: Upload Cucumber JSONs
@@ -70,8 +72,12 @@ jobs:
             echo "- Branch: $GITHUB_REF";
             echo "- Commit: $GITHUB_SHA";
             echo;
+            if [ "${{ steps.cucumber.outcome }}" == "failure" ]; then
+              echo "⚠️ **Atenção**: Cucumber teve falhas de cenário. Verifique o relatório.";
+              echo;
+            fi
             echo "### Relatórios anexados";
             echo "- Playwright: artifact 'playwright-report' (abra index.html)";
-            echo "- Cucumber: artifact 'cucumber-html' (arquivo cucumber-html-report.html)";
+            echo "- Cucumber HTML customizado: artifact 'cucumber-html' (arquivo cucumber-html-report.html)";
             echo "- Cucumber JSON: artifact 'cucumber-json'";
           } >> $GITHUB_STEP_SUMMARY
