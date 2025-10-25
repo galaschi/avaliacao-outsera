@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test:playwright": "npx playwright test",
-    "test:cucumber": "node ./node_modules/@cucumber/cucumber/bin/cucumber-js --require-module @babel/register --require tests/steps/**/*.js features/**/*.feature"
+    "test:cucumber": "node ./node_modules/@cucumber/cucumber/bin/cucumber-js --require-module @babel/register --require tests/steps/**/*.js features/**/*.feature",
+    "perf:k6": "k6 run k6/load-test.js"
   },
   "keywords": [],
   "author": "",

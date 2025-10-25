@@ -114,8 +114,6 @@ npm install
 npx playwright install
 ```
 
-> **Nota**: O comando `playwright install` baixa os binários dos navegadores (Chromium, Firefox, WebKit). Isso pode levar alguns minutos.
-
 ### 4. Verificar instalação
 ```powershell
 # Verifica a versão do Playwright
@@ -279,7 +277,58 @@ O arquivo de configuração `cucumber.js` já está configurado para gerar relat
 
 ---
 
-## 🔍 Scripts NPM Disponíveis
+## � Testes de Performance (k6)
+
+Este projeto inclui um script de teste de carga com k6 em `k6/load-test.js`, apontando por padrão para a API pública `https://test-api.k6.io`.
+
+### Instalação do k6 (Windows)
+
+Você pode instalar o k6 usando um destes métodos:
+
+```powershell
+# via winget
+winget install grafana.k6
+
+# via Chocolatey
+choco install k6
+```
+
+Verifique a instalação:
+
+```powershell
+k6 version
+```
+
+### Executar teste de carga (smoke)
+
+Executa um teste leve (padrão: 25 VUs por 30s). Gera relatórios em `test-results/k6-summary.html` e `test-results/k6-summary.json`.
+
+```powershell
+npm run perf:k6
+```
+
+### Executar teste de carga completo (500 usuários por 5 minutos)
+
+Use flags `-e` para configurar VUs, duração e base URL:
+
+```powershell
+k6 run k6/load-test.js -e VUS=500 -e DURATION=5m -e BASE_URL=https://test-api.k6.io
+```
+
+Após a execução, abra o relatório HTML:
+
+```powershell
+Start-Process test-results/k6-summary.html
+```
+
+### Métricas e thresholds aplicados
+- http_req_failed: < 1%
+- http_req_duration: P95 < 800ms e P99 < 1200ms
+- checks (asserts): > 99% passando
+
+---
+
+## �🔍 Scripts NPM Disponíveis
 
 Os seguintes scripts estão configurados no `package.json`:
 
@@ -289,6 +338,9 @@ npm run test:playwright
 
 # Executar testes Cucumber
 npm run test:cucumber
+
+# Executar teste de performance (k6 - smoke)
+npm run perf:k6
 ```
 
 ---
