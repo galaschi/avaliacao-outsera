@@ -419,6 +419,216 @@ Para dúvidas ou problemas:
 
 ---
 
-## 📄 Licença
+## � Testes Mobile (Appium + Android)
+
+Este projeto também inclui testes automatizados para **aplicativos Android** utilizando **Appium** e **WebDriverIO**.
+
+### Pré-requisitos
+
+Antes de executar os testes mobile, é necessário configurar o ambiente Android:
+
+1. **Java JDK 8 ou 11+**
+   - Download: https://www.oracle.com/java/technologies/javase-downloads.html
+   - Verifique: `java -version`
+   - Configure variável de ambiente: `JAVA_HOME=C:\Program Files\Java\jdk-11.x.x`
+
+2. **Android Studio**
+   - Download: https://developer.android.com/studio
+   - Durante a instalação, certifique-se de instalar:
+     - Android SDK
+     - Android SDK Platform-Tools
+     - Android Emulator
+   - Configure variável de ambiente: `ANDROID_HOME=C:\Users\<SEU_USUARIO>\AppData\Local\Android\Sdk`
+   - Adicione ao PATH:
+     - `%ANDROID_HOME%\platform-tools`
+     - `%ANDROID_HOME%\emulator`
+     - `%ANDROID_HOME%\tools`
+     - `%ANDROID_HOME%\tools\bin`
+
+3. **Appium Server**
+   ```powershell
+   npm install -g appium
+   ```
+
+4. **UIAutomator2 Driver (para Android)**
+   ```powershell
+   appium driver install uiautomator2
+   ```
+
+5. **ApiDemos App (APK de exemplo)**
+   - Download do APK: https://github.com/appium/appium/raw/master/packages/appium/sample-code/apps/ApiDemos-debug.apk
+   - Coloque o arquivo em: `mobile/apps/ApiDemos-debug.apk`
+   - Ou baixe diretamente:
+   ```powershell
+   New-Item -ItemType Directory -Force -Path mobile/apps
+   Invoke-WebRequest -Uri "https://github.com/appium/appium/raw/master/packages/appium/sample-code/apps/ApiDemos-debug.apk" -OutFile "mobile/apps/ApiDemos-debug.apk"
+   ```
+
+### Instalação de Dependências Mobile
+
+Após clonar o repositório e instalar as dependências gerais, instale as dependências de mobile:
+
+```powershell
+npm install
+```
+
+Isso instalará:
+- WebDriverIO (framework de automação)
+- Appium (cliente Node.js)
+- Allure Reporter (geração de relatórios)
+- Mocha (framework de testes)
+
+### Configurar e Iniciar Emulador Android
+
+#### Criar um emulador (AVD - Android Virtual Device)
+
+No Android Studio:
+1. Abra **Tools > Device Manager**
+2. Clique em **Create Device**
+3. Selecione um dispositivo (ex: Pixel 5)
+4. Selecione uma imagem do sistema: **API 33 (Android 13)** ou similar
+5. Nomeie como `test-emulator` e finalize
+
+#### Iniciar emulador via linha de comando
+
+```powershell
+# Listar emuladores disponíveis
+emulator -list-avds
+
+# Iniciar emulador (substitua <nome_do_avd> pelo nome do seu AVD)
+emulator -avd test-emulator
+```
+
+Aguarde até o emulador iniciar completamente (tela inicial do Android).
+
+Verifique se o emulador está conectado:
+
+```powershell
+adb devices
+```
+
+Deve exibir algo como:
+```
+List of devices attached
+emulator-5554   device
+```
+
+### Executar Testes Mobile
+
+#### 1. Inicie o Appium Server
+
+Em um terminal separado, execute:
+
+```powershell
+appium
+```
+
+Aguarde a mensagem: `Appium REST http interface listener started on http://0.0.0.0:4723`
+
+#### 2. Execute os testes
+
+Em outro terminal (mantendo Appium rodando):
+
+```powershell
+npm run test:mobile
+```
+
+Isso executará todos os testes mobile localizados em `mobile/tests/`:
+- **login.spec.js** (Tarefa 1): Testes de navegação e validação de elementos
+- **form.spec.js** (Tarefa 2): Automação de formulário com preenchimento e validação
+
+### Estrutura de Testes Mobile
+
+```
+mobile/
+├── config/
+│   └── wdio.conf.js         # Configuração do WebDriverIO
+├── page-objects/
+│   ├── LoginPage.js         # Page Object: navegação App > Activity > Custom Title
+│   └── FormPage.js          # Page Object: formulário Views > Controls > Light Theme
+├── tests/
+│   ├── login.spec.js        # Tarefa 1: Login e navegação
+│   └── form.spec.js         # Tarefa 2: Preenchimento de formulário
+└── apps/
+    └── ApiDemos-debug.apk   # APK de exemplo do Appium
+```
+
+### Relatórios Mobile (Allure)
+
+Os testes geram relatórios no formato **Allure** em `test-results/mobile/allure-results/`.
+
+Para visualizar o relatório HTML:
+
+```powershell
+# Gerar e abrir relatório Allure
+npx allure generate test-results/mobile/allure-results --clean
+npx allure open
+```
+
+Isso abrirá o relatório interativo no navegador com:
+- Suites de testes executadas
+- Detalhes de cada teste (steps, tempo, status)
+- Screenshots de falhas (se houver)
+- Histórico de execuções
+
+### Troubleshooting Mobile
+
+#### Erro: "Could not find adb"
+Verifique se `ANDROID_HOME` está configurado e `%ANDROID_HOME%\platform-tools` está no PATH.
+
+```powershell
+# Verificar variável
+echo $env:ANDROID_HOME
+
+# Adicionar ao PATH (temporário para a sessão atual)
+$env:PATH += ";$env:ANDROID_HOME\platform-tools"
+```
+
+#### Erro: "An unknown server-side error occurred while processing the command"
+- Certifique-se de que o emulador está rodando (`adb devices` deve listar `emulator-5554`)
+- Verifique se o Appium Server está ativo (`appium`)
+- Reinicie o emulador e o Appium
+
+#### Erro: "Element not found"
+- O locator pode ter mudado (ApiDemos pode variar entre versões)
+- Use Appium Inspector para identificar novos locators:
+  - Download: https://github.com/appium/appium-inspector/releases
+  - Configure capabilities (ver `wdio.conf.js`)
+  - Conecte ao emulador e inspecione elementos
+
+#### Erro: "Session not created: No such driver"
+Instale o driver UIAutomator2:
+
+```powershell
+appium driver install uiautomator2
+```
+
+#### Testes muito lentos
+- Aumente a RAM do emulador no Android Studio (Device Manager > Edit Device)
+- Use um dispositivo físico via USB (habilitar "Depuração USB" nas opções de desenvolvedor)
+- Configure `deviceName` em `wdio.conf.js` para o ID do dispositivo físico
+
+---
+
+## 📝 Scripts NPM Atualizados
+
+```powershell
+# Executar todos os testes Playwright
+npm run test:playwright
+
+# Executar testes Cucumber
+npm run test:cucumber
+
+# Executar teste de performance (k6 - smoke)
+npm run perf:k6
+
+# Executar testes mobile (Appium + Android)
+npm run test:mobile
+```
+
+---
+
+## �📄 Licença
 
 ISC
+
