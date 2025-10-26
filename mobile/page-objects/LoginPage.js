@@ -1,19 +1,6 @@
 class LoginPage {
-  // Locators (usando AccessibilityID e XPath como exemplo)
-  get usernameField() {
-    return $('~username'); // accessibility id
-  }
-  
-  get passwordField() {
-    return $('~password');
-  }
-  
-  get loginButton() {
-    return $('~Login');
-  }
-  
+  // Locators
   get appMenuItem() {
-    // XPath para navegar no menu do ApiDemos
     return $('//android.widget.TextView[@text="App"]');
   }
   
@@ -42,12 +29,6 @@ class LoginPage {
   }
   
   // Actions
-  async login(username, password) {
-    await this.usernameField.setValue(username);
-    await this.passwordField.setValue(password);
-    await this.loginButton.click();
-  }
-  
   async navigateToCustomTitle() {
     await this.appMenuItem.waitForDisplayed({ timeout: 10000 });
     await this.appMenuItem.click();
@@ -57,20 +38,6 @@ class LoginPage {
     
     await this.customTitleItem.waitForDisplayed();
     await this.customTitleItem.click();
-  }
-  
-  async fillLeftText(text) {
-    await this.leftTextInput.setValue(text);
-    await this.changeLeftButton.click();
-  }
-  
-  async fillRightText(text) {
-    await this.rightTextInput.setValue(text);
-    await this.changeRightButton.click();
-  }
-  
-  async isLoginButtonDisplayed() {
-    return await this.loginButton.isDisplayed();
   }
 }
 

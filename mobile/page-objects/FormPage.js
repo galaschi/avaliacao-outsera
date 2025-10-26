@@ -1,5 +1,5 @@
 class FormPage {
-  // Locators para formulário no ApiDemos (Views > Controls > 1. Light Theme)
+  // Locators
   get viewsMenuItem() {
     return $('//android.widget.TextView[@text="Views"]');
   }
@@ -22,22 +22,6 @@ class FormPage {
   
   get checkbox2() {
     return $('//android.widget.CheckBox[@text="Checkbox 2"]');
-  }
-  
-  get radioButton1() {
-    return $('//android.widget.RadioButton[@text="Radio button 1"]');
-  }
-  
-  get radioButton2() {
-    return $('//android.widget.RadioButton[@text="Radio button 2"]');
-  }
-  
-  get toggleButton() {
-    return $('//android.widget.ToggleButton');
-  }
-  
-  get starButton() {
-    return $('//android.widget.Button[@content-desc="Rated one star"]');
   }
   
   // Actions
@@ -65,29 +49,8 @@ class FormPage {
     await this.checkbox2.click();
   }
   
-  async selectRadioButton1() {
-    await this.radioButton1.click();
-  }
-  
-  async selectRadioButton2() {
-    await this.radioButton2.click();
-  }
-  
-  async toggleButton() {
-    await this.toggleButton.click();
-  }
-  
-  async rateOneStar() {
-    await this.starButton.click();
-  }
-  
   async isCheckbox1Selected() {
     const isSelected = await this.checkbox1.getAttribute('checked');
-    return isSelected === 'true';
-  }
-  
-  async isRadioButton1Selected() {
-    const isSelected = await this.radioButton1.getAttribute('checked');
     return isSelected === 'true';
   }
   
